@@ -1,13 +1,17 @@
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "fr.nigui.trackmywallet"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 1514010 // official scheme by google
+        versionName "0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -15,6 +19,20 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    // Create a static constant ETHERSCAN_API_KEY in BuildConfig class at runtime
+    // and for every build type (release,debug,...)
+    buildTypes.each {
+        it.buildConfigField 'String', 'ETHERSCAN_API_KEY', keystoreProperties['EtherscanApiKey']
+    }
+
+    // prevent boring findViewById
+    dataBinding.enabled = true
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
@@ -26,6 +44,52 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    // alternatively, just ViewModel
+    //-----------------------
+
+    // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:1.1.0"
+    // ReactiveStreams support for LiveData
+    implementation "android.arch.lifecycle:reactivestreams:1.1.0"
+
+    //-----------------------
+
+    // Java8 support for Lifecycles
+    implementation "android.arch.lifecycle:common-java8:1.1.0"
+
+    //-----------------------
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    // RxJava support for Room
+    implementation "android.arch.persistence.room:rxjava2:1.0.0"
+
+    //-----------------------
+
+    // REST api backend fetching with retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+
+    //-----------------------
+
+    // functional programming with rxjava 2
+    compile "io.reactivex.rxjava2:rxjava:2.1.9"
+    // android adapter for rxjava 2
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    //-----------------------
+
+    // Dependency Injection with Dagger 2
+    compile 'com.google.dagger:dagger-android:2.13'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.13'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+
+    //-----------------------
+
+    // JSON de/serializer
+    compile 'com.google.code.gson:gson:2.8.2'
+
+    //-----------------------
+
 }

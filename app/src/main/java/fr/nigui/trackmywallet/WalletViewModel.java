@@ -1,6 +1,11 @@
 package fr.nigui.trackmywallet;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
+
+import javax.inject.Inject;
+
+import fr.nigui.trackmywallet.di.DaggerWalletComponent;
 
 /**
  * Created by g-lap on 25/01/2018.
@@ -8,25 +13,23 @@ import android.arch.lifecycle.ViewModel;
 
 public class WalletViewModel extends ViewModel {
 
-    private String address;
-    private String balance;
-    private String label;
+    private LiveData<Wallet> wallet;
 
-    public void init(String address,String balance,String label){
-        this.address = address;
-        this.balance = balance;
-        this.label = label;
+    @Inject
+    WalletRepository walletRepo;
+
+    public WalletViewModel() {
+        DaggerWalletComponent.create().inject(this);
     }
 
-    public String getAddress() {
-        return address;
+    public void init(String walletID){
+        if( this.wallet != null ){
+            return;
+        }
+        this.wallet = this.walletRepo.getWallet(walletID);
     }
 
-    public String getBalance() {
-        return balance;
-    }
-
-    public String getLabel() {
-        return label;
+    public LiveData<Wallet> getWallet() {
+        return wallet;
     }
 }
