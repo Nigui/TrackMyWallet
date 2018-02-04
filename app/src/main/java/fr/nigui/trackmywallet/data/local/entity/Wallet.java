@@ -1,4 +1,4 @@
-package fr.nigui.trackmywallet;
+package fr.nigui.trackmywallet.data.local.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

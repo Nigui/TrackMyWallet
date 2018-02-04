@@ -1,7 +1,10 @@
-package fr.nigui.trackmywallet;
+package fr.nigui.trackmywallet.data.local;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
+
+import fr.nigui.trackmywallet.data.local.entity.Wallet;
+import fr.nigui.trackmywallet.data.local.dao.WalletDao;
 
 /**
  * Created by g-lap on 27/01/2018.

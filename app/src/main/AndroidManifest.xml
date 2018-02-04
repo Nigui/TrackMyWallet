@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         android:name=".TrackMyWalletApplication">
 
-        <activity android:name=".WalletActivity">
+        <activity android:name=".ui.WalletActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
