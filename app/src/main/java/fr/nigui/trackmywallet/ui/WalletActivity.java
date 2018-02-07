@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -18,9 +19,10 @@ import fr.nigui.trackmywallet.databinding.WalletBinding;
  */
 public class WalletActivity extends AppCompatActivity {
 
+    private static final String TAG = "WalletActivity";
+
     private static final String WALLETADDRESS_KEY = "walletAddress";
     private static final String WALLETADDRESS_DEFAULT = "0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a";
-
 
     WalletBinding walletBinding;
 
@@ -36,6 +38,12 @@ public class WalletActivity extends AppCompatActivity {
         walletBinding = DataBindingUtil.setContentView(this, R.layout.wallet);
         walletViewModel = ViewModelProviders.of(this,viewModelFactory).get(WalletViewModel.class);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         String walletID = getIntent().getStringExtra(WALLETADDRESS_KEY);
         if( walletID == null ){
             walletID = WALLETADDRESS_DEFAULT;
@@ -44,6 +52,7 @@ public class WalletActivity extends AppCompatActivity {
         walletViewModel.getWallet(walletID).observe(this, wallet -> {
 
             if( wallet != null ) {
+                Log.d(TAG,"Wallet data loaded into view");
                 walletBinding.walletAddress.setText(wallet.getAddress());
                 walletBinding.walletLabel.setText(wallet.getLabel());
                 walletBinding.walletBalance.setText(wallet.getBalance());
@@ -55,5 +64,4 @@ public class WalletActivity extends AppCompatActivity {
         });
 
     }
-
 }

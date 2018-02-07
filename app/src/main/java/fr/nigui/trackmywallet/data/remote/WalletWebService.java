@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 
 public interface WalletWebService {
 
-    @GET("/api?" +
+    @GET("api?" +
             "module=account" + "&" +
             "action=balance" + "&" +
             "tag=latest" + "&" +
