@@ -9,9 +9,11 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import fr.nigui.trackmywallet.data.local.TrackMyWalletDatabase;
+import fr.nigui.trackmywallet.data.local.dao.ExchangePriceDao;
 import fr.nigui.trackmywallet.data.local.dao.WalletDao;
 import fr.nigui.trackmywallet.data.remote.ApiConstants;
-import fr.nigui.trackmywallet.data.remote.WalletWebService;
+import fr.nigui.trackmywallet.data.remote.EthereumWalletBalanceWebService;
+import fr.nigui.trackmywallet.data.remote.ExchangePriceWebService;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -30,13 +32,24 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public WalletWebService provideWalletWebService() {
+    public EthereumWalletBalanceWebService provideEthereumWalletBalanceWebService() {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(ApiConstants.ENDPOINT)
+                .baseUrl(ApiConstants.ETHEREUM_WALLET_BALANCE_ENDPOINT)
                 .build()
-                .create(WalletWebService.class);
+                .create(EthereumWalletBalanceWebService.class);
+    }
+
+    @Provides
+    @Singleton
+    public ExchangePriceWebService provideExchangePriceWebService() {
+        return new Retrofit.Builder()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiConstants.EXCHANGE_PRICE_ENDPOINT)
+                .build()
+                .create(ExchangePriceWebService.class);
     }
 
     @Provides
@@ -50,6 +63,12 @@ public class AppModule {
     @Singleton
     WalletDao provideWalletDao(TrackMyWalletDatabase trackMyWalletDatabase) {
         return trackMyWalletDatabase.walletDao();
+    }
+
+    @Provides
+    @Singleton
+    ExchangePriceDao provideExchangePriceDao(TrackMyWalletDatabase trackMyWalletDatabase) {
+        return trackMyWalletDatabase.exchangePriceDao();
     }
 
 }

@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 import fr.nigui.trackmywallet.data.local.entity.Wallet;
 import fr.nigui.trackmywallet.data.local.dao.WalletDao;
-import fr.nigui.trackmywallet.data.remote.WalletWebService;
+import fr.nigui.trackmywallet.data.remote.EthereumWalletBalanceWebService;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -17,21 +17,21 @@ import io.reactivex.schedulers.Schedulers;
 public class WalletRepository {
 
     private final WalletDao walletDao;
-    private final WalletWebService walletWebService;
+    private final EthereumWalletBalanceWebService ethereumWalletBalanceWebService;
 
     @Inject
-    public WalletRepository(WalletDao walletDao,WalletWebService walletWebService) {
+    public WalletRepository(WalletDao walletDao,EthereumWalletBalanceWebService ethereumWalletBalanceWebService) {
         this.walletDao = walletDao;
-        this.walletWebService = walletWebService;
+        this.ethereumWalletBalanceWebService = ethereumWalletBalanceWebService;
     }
 
     public LiveData<Wallet> getWallet(String walletID) {
-        refreshWallet(walletID);
+        refreshWalletBalance(walletID);
         return walletDao.getWallet(walletID);
     }
 
-    private void refreshWallet(final String walletID){
-        walletWebService.getWalletBalance(walletID)
+    private void refreshWalletBalance(final String walletID){
+        ethereumWalletBalanceWebService.getWalletBalance(walletID)
             .doOnSuccess(response -> {
                 walletDao.saveWallet(new Wallet(walletID,response.getResult(),null));
             })
@@ -42,5 +42,6 @@ public class WalletRepository {
             .subscribeOn(Schedulers.single())
             .subscribe();
     }
+
 
 }

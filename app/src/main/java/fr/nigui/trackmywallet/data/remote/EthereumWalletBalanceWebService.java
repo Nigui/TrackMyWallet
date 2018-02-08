@@ -11,7 +11,7 @@ import retrofit2.http.Query;
  * Created by g-lap on 27/01/2018.
  */
 
-public interface WalletWebService {
+public interface EthereumWalletBalanceWebService {
 
     @GET("api?" +
             "module=account" + "&" +
