@@ -1,5 +1,7 @@
 package fr.nigui.trackmywallet.data.model;
 
+import android.arch.persistence.room.TypeConverter;
+
 /**
  * Created by g-lap on 07/02/2018.
  */
@@ -27,6 +29,7 @@ public enum FiatCurrency {
      * @return FiatCurrency string from which to get FiatCurrency instance.
      * @throws IllegalArgumentException if given string doesn't match any FiatCurrency constant
      */
+    @TypeConverter
     public static FiatCurrency fromString(String fiat) {
 
         FiatCurrency[] constants = FiatCurrency.class.getEnumConstants();
@@ -38,5 +41,10 @@ public enum FiatCurrency {
         throw new IllegalArgumentException(
                 "CryptoCurrency.fromString("+fiat+") - "+fiat+" doesn't exist"
         );
+    }
+
+    @TypeConverter
+    public static String toString(FiatCurrency fiat){
+        return fiat.name();
     }
 }

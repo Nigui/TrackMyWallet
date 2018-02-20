@@ -4,16 +4,24 @@ import android.app.Application;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import fr.nigui.trackmywallet.data.model.CryptoCurrency;
+import fr.nigui.trackmywallet.data.model.serializer.CryptoCurrencySerializer;
 import fr.nigui.trackmywallet.data.local.TrackMyWalletDatabase;
 import fr.nigui.trackmywallet.data.local.dao.ExchangePriceDao;
 import fr.nigui.trackmywallet.data.local.dao.WalletDao;
 import fr.nigui.trackmywallet.data.remote.ApiConstants;
 import fr.nigui.trackmywallet.data.remote.EthereumWalletBalanceWebService;
 import fr.nigui.trackmywallet.data.remote.ExchangePriceWebService;
+import fr.nigui.trackmywallet.util.io.GsonStringConverterFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -44,10 +52,24 @@ public class AppModule {
     @Provides
     @Singleton
     public ExchangePriceWebService provideExchangePriceWebService() {
+
+        // Use http interceptor to show detailed logs of retrofit calls
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        // Create custom GSON with custom type adapters
+        Gson customGson = new GsonBuilder()
+                .registerTypeAdapter(CryptoCurrency.class, CryptoCurrencySerializer.getInstance())
+                .create();
+
+        // Build retrofit service
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(customGson))
+                .addConverterFactory(GsonStringConverterFactory.create(customGson))
                 .baseUrl(ApiConstants.EXCHANGE_PRICE_ENDPOINT)
+                .client(client)
                 .build()
                 .create(ExchangePriceWebService.class);
     }
