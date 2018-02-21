@@ -16,6 +16,7 @@ import retrofit2.Retrofit;
  * It searches into given Gson type adapters ((de)serializers) to convert types used by a retrofit
  * query into a string forming final url.
  * It prevents overriding default type toString method.
+ *
  * @See <a href="https://stackoverflow.com/a/42459356">Solution found on StackOverflow</a>
  */
 public class GsonStringConverterFactory extends Converter.Factory {
@@ -26,7 +27,7 @@ public class GsonStringConverterFactory extends Converter.Factory {
         this.gson = gson;
     }
 
-    public static GsonStringConverterFactory create(final Gson gson){
+    public static GsonStringConverterFactory create(final Gson gson) {
         if (gson == null) throw new NullPointerException("gson == null");
         return new GsonStringConverterFactory(gson);
     }
@@ -38,7 +39,7 @@ public class GsonStringConverterFactory extends Converter.Factory {
         final TypeAdapter typeAdapter;
         typeAdapter = gson.getAdapter(TypeToken.get(type));
 
-        return new StringConverter<>(typeAdapter,type,annotations,retrofit);
+        return new StringConverter<>(typeAdapter, type, annotations, retrofit);
     }
 
     private static class StringConverter<T>
@@ -61,7 +62,7 @@ public class GsonStringConverterFactory extends Converter.Factory {
             final String jsonValue;
             jsonValue = typeAdapter.toJson(value);
 
-            if (jsonValue.startsWith("\"") && jsonValue.endsWith("\"") ){
+            if (jsonValue.startsWith("\"") && jsonValue.endsWith("\"")) {
                 /* Strip enclosing quotes for json String types */
                 return jsonValue.substring(1, jsonValue.length() - 1);
             } else {

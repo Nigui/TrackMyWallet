@@ -19,6 +19,8 @@ import fr.nigui.trackmywallet.TrackMyWalletApplication;
         ActivityBuilderModule.class})
 public interface AppComponent {
 
+    void inject(TrackMyWalletApplication application);
+
     @Component.Builder
     interface Builder {
         @BindsInstance
@@ -26,7 +28,5 @@ public interface AppComponent {
 
         AppComponent build();
     }
-
-    void inject(TrackMyWalletApplication application);
 
 }

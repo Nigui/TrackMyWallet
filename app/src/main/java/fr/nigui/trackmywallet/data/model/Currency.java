@@ -7,6 +7,7 @@ package fr.nigui.trackmywallet.data.model;
 public interface Currency {
 
     String getName();
+
     String getSymbol();
 
 }

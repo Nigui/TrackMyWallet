@@ -13,14 +13,14 @@ public class FiatCurrencyTest {
     @Test
     public void fromString() throws Exception {
 
-        assertEquals(FiatCurrency.fromString("EUR"),FiatCurrency.EUR);
-        assertEquals(FiatCurrency.fromString("HUF"),FiatCurrency.HUF);
-        assertEquals(FiatCurrency.fromString("GBP"),FiatCurrency.GBP);
+        assertEquals(FiatCurrency.fromString("EUR"), FiatCurrency.EUR);
+        assertEquals(FiatCurrency.fromString("HUF"), FiatCurrency.HUF);
+        assertEquals(FiatCurrency.fromString("GBP"), FiatCurrency.GBP);
 
     }
 
     @Test
-    public void fromStringFail() throws Exception{
+    public void fromStringFail() throws Exception {
 
         assertNull(FiatCurrency.fromString("ZZZ"));
         assertNull(FiatCurrency.fromString(""));

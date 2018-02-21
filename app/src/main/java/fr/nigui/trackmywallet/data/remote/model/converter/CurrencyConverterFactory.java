@@ -18,7 +18,8 @@ import retrofit2.http.Query;
 
 public class CurrencyConverterFactory extends Converter.Factory {
 
-    private CurrencyConverterFactory() {}
+    private CurrencyConverterFactory() {
+    }
 
     public static CurrencyConverterFactory create() {
         return new CurrencyConverterFactory();
@@ -28,17 +29,17 @@ public class CurrencyConverterFactory extends Converter.Factory {
     @Override
     public Converter<? extends Currency, String> stringConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
 
-        if (annotations.length > 0 ){
+        if (annotations.length > 0) {
 
             // any Currency object (or sub-class) annotated with Query
-            if( annotations[0].annotationType() == Query.class ) {
+            if (annotations[0].annotationType() == Query.class) {
                 return (Converter<Currency, String>) Currency::getSymbol;
             }
 
             // CryptoCurrency objects annotated with Path
-            if( type instanceof Class
+            if (type instanceof Class
                     && CryptoCurrency.class.isAssignableFrom((Class) type)
-                    && annotations[0].annotationType() == Path.class ){
+                    && annotations[0].annotationType() == Path.class) {
                 return (Converter<Currency, String>) Currency::getName;
             }
 

@@ -36,7 +36,7 @@ public class WalletActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         walletBinding = DataBindingUtil.setContentView(this, R.layout.wallet);
-        walletViewModel = ViewModelProviders.of(this,viewModelFactory).get(WalletViewModel.class);
+        walletViewModel = ViewModelProviders.of(this, viewModelFactory).get(WalletViewModel.class);
 
     }
 
@@ -45,14 +45,14 @@ public class WalletActivity extends AppCompatActivity {
         super.onResume();
 
         String walletID = getIntent().getStringExtra(WALLETADDRESS_KEY);
-        if( walletID == null ){
+        if (walletID == null) {
             walletID = WALLETADDRESS_DEFAULT;
         }
 
         walletViewModel.getWallet(walletID).observe(this, wallet -> {
 
-            if( wallet != null ) {
-                Log.d(TAG,"Wallet data loaded into view");
+            if (wallet != null) {
+                Log.d(TAG, "Wallet data loaded into view");
                 walletBinding.walletAddress.setText(wallet.getAddress());
                 walletBinding.walletLabel.setText(wallet.getLabel());
                 walletBinding.walletBalance.setText(wallet.getBalance());

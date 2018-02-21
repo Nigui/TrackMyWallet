@@ -34,7 +34,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Context provideContext(Application application){
+    public Context provideContext(Application application) {
         return application.getApplicationContext();
     }
 
@@ -76,8 +76,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public TrackMyWalletDatabase provideDatabase(Context context){
-        return Room.databaseBuilder(context,TrackMyWalletDatabase.class, "trackmywallet.db")
+    public TrackMyWalletDatabase provideDatabase(Context context) {
+        return Room.databaseBuilder(context, TrackMyWalletDatabase.class, "trackmywallet.db")
                 .build();
     }
 

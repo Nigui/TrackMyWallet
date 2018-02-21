@@ -17,6 +17,6 @@ public interface EthereumWalletBalanceWebService {
             "module=account" + "&" +
             "action=balance" + "&" +
             "tag=latest" + "&" +
-            "apikey="+ BuildConfig.ETHERSCAN_API_KEY)
+            "apikey=" + BuildConfig.ETHERSCAN_API_KEY)
     Single<WalletBalanceApiResponse> getWalletBalance(@Query("address") String walletAddress);
 }

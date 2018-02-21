@@ -14,7 +14,7 @@ import fr.nigui.trackmywallet.di.DaggerAppComponent;
  * Created by g-lap on 28/01/2018.
  */
 
-public class TrackMyWalletApplication extends Application implements HasActivityInjector{
+public class TrackMyWalletApplication extends Application implements HasActivityInjector {
 
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingInjector;

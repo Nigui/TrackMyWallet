@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import fr.nigui.trackmywallet.data.local.dao.ExchangePriceDao;
-import fr.nigui.trackmywallet.data.local.entity.Wallet;
 import fr.nigui.trackmywallet.data.local.dao.WalletDao;
+import fr.nigui.trackmywallet.data.local.entity.Wallet;
 import fr.nigui.trackmywallet.data.model.CryptoCurrency;
 import fr.nigui.trackmywallet.data.model.Currency;
 import fr.nigui.trackmywallet.data.model.FiatCurrency;
@@ -44,47 +44,45 @@ public class WalletRepository {
 
     public LiveData<Wallet> getWallet(String walletID) {
         refreshWalletBalance(walletID);
-        refreshExchangePrice(CryptoCurrency.ETH,FiatCurrency.EUR);
+        refreshExchangePrice(CryptoCurrency.ETH, FiatCurrency.EUR);
         return walletDao.getWallet(walletID);
     }
 
-    private void refreshWalletBalance(final String walletID){
+    private void refreshWalletBalance(final String walletID) {
         ethereumWalletBalanceWebService.getWalletBalance(walletID)
-            .doOnSuccess(response -> {
-                walletDao.saveWallet(new Wallet(walletID,response.getResult(),null));
-            })
-            .doOnError(error -> {
-                //TODO manage error
-                Log.e(getClass().getSimpleName(),error.getMessage());
-            })
-            .subscribeOn(Schedulers.single())
-            .subscribe();
+                .doOnSuccess(response -> {
+                    walletDao.saveWallet(new Wallet(walletID, response.getResult(), null));
+                })
+                .doOnError(error -> {
+                    //TODO manage error
+                    Log.e(getClass().getSimpleName(), error.getMessage());
+                })
+                .subscribeOn(Schedulers.single())
+                .subscribe();
     }
 
-    private void refreshExchangePrice(final CryptoCurrency crypto, final Currency targetCurrency ){
+    private void refreshExchangePrice(final CryptoCurrency crypto, final Currency targetCurrency) {
 
-        exchangePriceWebService.fetchExchangePrice(crypto,targetCurrency)
+        exchangePriceWebService.fetchExchangePrice(crypto, targetCurrency)
                 .doOnSuccess(price -> {
 
                     StringBuilder sb = new StringBuilder();
 
-                    for(Map.Entry<Currency,String> e : price.getDestCurrencies().entrySet() ){
-                        sb.append("\n\t--> "+e.getKey()+" : "+e.getValue());
+                    for (Map.Entry<Currency, String> e : price.getDestCurrencies().entrySet()) {
+                        sb.append("\n\t--> " + e.getKey() + " : " + e.getValue());
                     }
 
-                    Log.d(getClass().getSimpleName(),price.getSourceCurrency()
+                    Log.d(getClass().getSimpleName(), price.getSourceCurrency()
                             + sb.toString());
                 })
                 .doOnError(error -> {
                     //TODO manage error
-                    Log.e(getClass().getSimpleName(),error.getMessage());
+                    Log.e(getClass().getSimpleName(), error.getMessage());
                 })
                 .subscribeOn(Schedulers.single())
                 .subscribe();
 
     }
-
-
 
 
 }

@@ -10,7 +10,7 @@ import fr.nigui.trackmywallet.data.model.FiatCurrency;
  * Created by g-lap on 08/02/2018.
  */
 
-@Entity(primaryKeys = {"fiat","crypto"})
+@Entity(primaryKeys = {"fiat", "crypto"})
 public class ExchangePrice {
 
     @NonNull

@@ -11,7 +11,7 @@ import fr.nigui.trackmywallet.data.model.Currency;
 public class ExchangePriceApiResponse {
 
     Currency sourceCurrency;
-    Map<Currency,String> destCurrencies;
+    Map<Currency, String> destCurrencies;
 
     public ExchangePriceApiResponse(Currency sourceCurrency, Map<Currency, String> destCurrencies) {
         this.sourceCurrency = sourceCurrency;

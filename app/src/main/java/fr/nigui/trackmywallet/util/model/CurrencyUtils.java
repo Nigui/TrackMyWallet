@@ -11,11 +11,11 @@ import fr.nigui.trackmywallet.data.model.FiatCurrency;
 public abstract class CurrencyUtils {
 
 
-    public static final Currency fromString(String string){
+    public static final Currency fromString(String string) {
 
         Currency ret;
         ret = CryptoCurrency.fromString(string);
-        if( ret == null ){
+        if (ret == null) {
             ret = FiatCurrency.fromString(string);
         }
 

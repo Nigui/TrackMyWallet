@@ -8,8 +8,8 @@ import android.arch.persistence.room.TypeConverter;
 
 public enum CryptoCurrency implements Currency {
 
-    ETH("ethereum","ETH"),
-    BTC("bitcoin","BTC");
+    ETH("ethereum", "ETH"),
+    BTC("bitcoin", "BTC");
 
     private final String name;
     private final String symbol;
@@ -19,29 +19,19 @@ public enum CryptoCurrency implements Currency {
         this.symbol = symbol;
     }
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getSymbol() {
-        return this.symbol;
-    }
-
-
     /**
      * Convert cryptocurrency string to CryptoCurrency enum.
      * Can convert from name or symbol.
+     *
      * @param crypto cryptocurrency string name or symbol
      * @return cryptocurrency string from which to get CryptoCurrency instance.
      */
     @TypeConverter
-    public static CryptoCurrency fromString(String crypto) throws IllegalArgumentException{
+    public static CryptoCurrency fromString(String crypto) throws IllegalArgumentException {
         CryptoCurrency[] constants = CryptoCurrency.class.getEnumConstants();
-        for( CryptoCurrency constant : constants ){
-            if( constant.name.compareTo(crypto) == 0
-                    || constant.symbol.compareTo(crypto) == 0 ){
+        for (CryptoCurrency constant : constants) {
+            if (constant.name.compareTo(crypto) == 0
+                    || constant.symbol.compareTo(crypto) == 0) {
                 return constant;
             }
         }
@@ -53,10 +43,19 @@ public enum CryptoCurrency implements Currency {
      * Used by Room for the database
      */
     @TypeConverter
-    public static String toString(CryptoCurrency crypto){
+    public static String toString(CryptoCurrency crypto) {
         return crypto.name;
     }
 
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getSymbol() {
+        return this.symbol;
+    }
 
 
 }
