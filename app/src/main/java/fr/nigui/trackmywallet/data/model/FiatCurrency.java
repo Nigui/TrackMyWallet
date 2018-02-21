@@ -15,36 +15,34 @@ public enum FiatCurrency {
     KRW("KRW"),     MXN("MXN"),     MYR("MYR"),     NOK("NOK"),
     NZD("NZD"),     PHP("PHP"),     PKR("PKR"),     PLN("PLN"),
     RUB("RUB"),     SEK("SEK"),     SGD("SGD"),     THB("THB"),
-    TRY("TRY"),     TWD("TWD"),     ZAR("ZAR");
+    TRY("TRY"),     TWD("TWD"),     USD("USD"),     ZAR("ZAR");
 
-    String value;
+    String symbol;
 
-    FiatCurrency(String value) {
-        this.value = value;
+    FiatCurrency(String symbol) {
+        this.symbol = symbol;
     }
 
     /**
      * Convert FiatCurrency string to FiatCurrency enum.
-     * @param fiat FiatCurrency string value
-     * @return FiatCurrency string from which to get FiatCurrency instance.
-     * @throws IllegalArgumentException if given string doesn't match any FiatCurrency constant
+     * @param fiat FiatCurrency string name
+     * @return FiatCurrency constant related to given fiat name or symbol. Null if not supported
      */
     @TypeConverter
     public static FiatCurrency fromString(String fiat) {
-
-        FiatCurrency[] constants = FiatCurrency.class.getEnumConstants();
-        for( FiatCurrency constant : constants ){
-            if( constant.value.compareTo(fiat) == 0 ){
-                return constant;
+        if( fiat != null ) {
+            FiatCurrency[] constants = FiatCurrency.class.getEnumConstants();
+            for (FiatCurrency constant : constants) {
+                if (constant.symbol.compareTo(fiat) == 0) {
+                    return constant;
+                }
             }
         }
-        throw new IllegalArgumentException(
-                "CryptoCurrency.fromString("+fiat+") - "+fiat+" doesn't exist"
-        );
+        return null;
     }
 
     @TypeConverter
     public static String toString(FiatCurrency fiat){
-        return fiat.name();
+        return fiat.symbol;
     }
 }

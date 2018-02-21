@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
  * A Gson Factory for String Converters.
  * It searches into given Gson type adapters ((de)serializers) to convert types used by a retrofit
  * query into a string forming final url.
- * It prevents overriding default type toString method.
+ * It prevents overriding default type toName method.
  * @See <a href="https://stackoverflow.com/a/42459356">Solution found on StackOverflow</a>
  */
 public class GsonStringConverterFactory extends Converter.Factory {

@@ -8,40 +8,41 @@ import android.arch.persistence.room.TypeConverter;
 
 public enum CryptoCurrency {
 
-    ETH("ethereum"),     BTC("bitcoin"),     XRP("XRP"),     BCH("BCH"),
-    QTUM("QTUM");
+    ETH("ethereum","ETH"),      BTC("bitcoin","BTC");
 
-    String value;
+    String name;
+    String symbol;
 
-    CryptoCurrency(String value) {
-        this.value = value;
+    CryptoCurrency(String name, String symbol) {
+        this.name = name;
+        this.symbol = symbol;
     }
 
     /**
      * Convert cryptocurrency string to CryptoCurrency enum.
-     * @param crypto cryptocurrency string value
+     * Can convert from name or symbol.
+     * @param crypto cryptocurrency string name or symbol
      * @return cryptocurrency string from which to get CryptoCurrency instance.
-     * @throws IllegalArgumentException if given string doesn't match any references CryptoCurrency
      */
     @TypeConverter
     public static CryptoCurrency fromString(String crypto) throws IllegalArgumentException{
         CryptoCurrency[] constants = CryptoCurrency.class.getEnumConstants();
         for( CryptoCurrency constant : constants ){
-            if( constant.value.compareTo(crypto) == 0 ){
+            if( constant.name.compareTo(crypto) == 0
+                    || constant.symbol.compareTo(crypto) == 0 ){
                 return constant;
             }
         }
-        throw new IllegalArgumentException(
-                "CryptoCurrency.fromString("+crypto+") - "+crypto+" doesn't exist");
+        return null;
     }
 
     /**
-     * Converts given CryptoCurrency to its string value.
+     * Converts given CryptoCurrency to its string name.
      * Used by Room for the database
      */
     @TypeConverter
-    public static String toString(CryptoCurrency crypto){
-        return crypto.value;
+    public static String toName(CryptoCurrency crypto){
+        return crypto.name;
     }
 
 

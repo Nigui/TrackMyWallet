@@ -4,6 +4,8 @@ import android.arch.lifecycle.LiveData;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -64,7 +66,15 @@ public class WalletRepository {
 
         exchangePriceWebService.fetchExchangePrice(crypto,fiat)
                 .doOnSuccess(price -> {
-                    Log.d(getClass().getSimpleName(),"price : "+price);
+
+                    StringBuilder sb = new StringBuilder();
+
+                    for(Map.Entry<FiatCurrency,String> e : price.getDestCurrencies().entrySet() ){
+                        sb.append("--> "+e.getKey()+" : "+e.getValue());
+                    }
+
+                    Log.d(getClass().getSimpleName(),price.getSourceCurrency()
+                            + sb.toString());
                 })
                 .doOnError(error -> {
                     //TODO manage error

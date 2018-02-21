@@ -28,6 +28,6 @@ public class CryptoCurrencySerializer implements JsonSerializer<CryptoCurrency> 
 
     @Override
     public JsonElement serialize(CryptoCurrency src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(CryptoCurrency.toString(src));
+        return new JsonPrimitive(CryptoCurrency.toName(src));
     }
 }

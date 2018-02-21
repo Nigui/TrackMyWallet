@@ -19,7 +19,7 @@ public class FiatCurrencyTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fromStringFail() throws Exception{
 
         assertNull(FiatCurrency.fromString("ZZZ"));
