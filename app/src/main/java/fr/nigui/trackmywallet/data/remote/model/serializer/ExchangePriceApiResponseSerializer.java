@@ -9,14 +9,12 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.util.AbstractMap;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import fr.nigui.trackmywallet.data.model.CryptoCurrency;
-import fr.nigui.trackmywallet.data.model.FiatCurrency;
+import fr.nigui.trackmywallet.data.model.Currency;
 import fr.nigui.trackmywallet.data.remote.model.ExchangePriceApiResponse;
+import fr.nigui.trackmywallet.util.model.CurrencyUtils;
 import io.reactivex.Observable;
 
 /**
@@ -36,7 +34,6 @@ public class ExchangePriceApiResponseSerializer implements JsonDeserializer<Exch
         return INSTANCE;
     }
 
-
     @Override
     public ExchangePriceApiResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
@@ -48,7 +45,7 @@ public class ExchangePriceApiResponseSerializer implements JsonDeserializer<Exch
             * For each price_* json property,
             * Extract into Map currency enum constant and exchange price
             */
-            Map<FiatCurrency,String> exchangePrices =
+            Map<Currency,String> exchangePrices =
                 Observable.fromIterable(()->firstItemObject.entrySet().iterator())
                     .filter(jsonProperty -> jsonProperty.getKey().startsWith("price_"))
                     .map(jsonProperty -> {
@@ -56,15 +53,15 @@ public class ExchangePriceApiResponseSerializer implements JsonDeserializer<Exch
                                 .replace("price_","")
                                 .toUpperCase();
                         String exchangePrice = jsonProperty.getValue().getAsString();
-                        FiatCurrency currency = FiatCurrency.fromString(currencyKey);
+                        Currency currency = CurrencyUtils.fromString(currencyKey);
                         return new AbstractMap.SimpleEntry<>(currency, exchangePrice);
                     })
                     .toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)
                     .blockingGet();
 
-            String crypto = firstItemObject.get("symbol").getAsString();
+            String sourceCurrency = firstItemObject.get("symbol").getAsString();
 
-            return new ExchangePriceApiResponse(CryptoCurrency.fromString(crypto),exchangePrices);
+            return new ExchangePriceApiResponse(CurrencyUtils.fromString(sourceCurrency),exchangePrices);
         }
 
         throw new RuntimeException("json array from exchange webservice is empty or null ");

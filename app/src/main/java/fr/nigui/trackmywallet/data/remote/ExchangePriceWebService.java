@@ -1,7 +1,7 @@
 package fr.nigui.trackmywallet.data.remote;
 
 import fr.nigui.trackmywallet.data.model.CryptoCurrency;
-import fr.nigui.trackmywallet.data.model.FiatCurrency;
+import fr.nigui.trackmywallet.data.model.Currency;
 import fr.nigui.trackmywallet.data.remote.model.ExchangePriceApiResponse;
 import io.reactivex.Single;
 import retrofit2.http.GET;
@@ -17,6 +17,6 @@ public interface ExchangePriceWebService {
     @GET("{cryptocurrency}/")
     Single<ExchangePriceApiResponse> fetchExchangePrice(
             @Path("cryptocurrency") CryptoCurrency cryptocurrency,
-            @Query("convert") FiatCurrency fiatCurrency);
+            @Query("convert") Currency targetCurrency);
 
 }

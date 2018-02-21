@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
  * A Gson Factory for String Converters.
  * It searches into given Gson type adapters ((de)serializers) to convert types used by a retrofit
  * query into a string forming final url.
- * It prevents overriding default type toName method.
+ * It prevents overriding default type toString method.
  * @See <a href="https://stackoverflow.com/a/42459356">Solution found on StackOverflow</a>
  */
 public class GsonStringConverterFactory extends Converter.Factory {
@@ -38,17 +38,22 @@ public class GsonStringConverterFactory extends Converter.Factory {
         final TypeAdapter typeAdapter;
         typeAdapter = gson.getAdapter(TypeToken.get(type));
 
-        return new StringConverter<>(typeAdapter);
+        return new StringConverter<>(typeAdapter,type,annotations,retrofit);
     }
 
     private static class StringConverter<T>
             implements Converter<T, String> {
 
         private final TypeAdapter<T> typeAdapter;
+        Type type;
+        Annotation[] annotation;
+        Retrofit retrofit;
 
-        private StringConverter(final TypeAdapter<T> typeAdapter) {
-
+        private StringConverter(TypeAdapter<T> typeAdapter, Type type, Annotation[] annotation, Retrofit retrofit) {
             this.typeAdapter = typeAdapter;
+            this.type = type;
+            this.annotation = annotation;
+            this.retrofit = retrofit;
         }
 
         @Override

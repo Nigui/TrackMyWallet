@@ -11,9 +11,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import fr.nigui.trackmywallet.data.local.entity.ExchangePrice;
-import fr.nigui.trackmywallet.data.model.CryptoCurrency;
-import fr.nigui.trackmywallet.data.model.serializer.CryptoCurrencySerializer;
 import fr.nigui.trackmywallet.data.local.TrackMyWalletDatabase;
 import fr.nigui.trackmywallet.data.local.dao.ExchangePriceDao;
 import fr.nigui.trackmywallet.data.local.dao.WalletDao;
@@ -21,8 +18,8 @@ import fr.nigui.trackmywallet.data.remote.ApiConstants;
 import fr.nigui.trackmywallet.data.remote.EthereumWalletBalanceWebService;
 import fr.nigui.trackmywallet.data.remote.ExchangePriceWebService;
 import fr.nigui.trackmywallet.data.remote.model.ExchangePriceApiResponse;
+import fr.nigui.trackmywallet.data.remote.model.converter.CurrencyConverterFactory;
 import fr.nigui.trackmywallet.data.remote.model.serializer.ExchangePriceApiResponseSerializer;
-import fr.nigui.trackmywallet.util.io.GsonStringConverterFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -63,15 +60,14 @@ public class AppModule {
 
         // Create custom GSON with custom type adapters
         Gson customGson = new GsonBuilder()
-                .registerTypeAdapter(CryptoCurrency.class, CryptoCurrencySerializer.getInstance())
                 .registerTypeAdapter(ExchangePriceApiResponse.class, ExchangePriceApiResponseSerializer.getInstance())
                 .create();
 
         // Build retrofit service
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(customGson))
-                .addConverterFactory(GsonStringConverterFactory.create(customGson))
+                .addConverterFactory(GsonConverterFactory.create(customGson)) // gson converter
+                .addConverterFactory(CurrencyConverterFactory.create()) // converter for currencies in @Query
                 .baseUrl(ApiConstants.EXCHANGE_PRICE_ENDPOINT)
                 .client(client)
                 .build()

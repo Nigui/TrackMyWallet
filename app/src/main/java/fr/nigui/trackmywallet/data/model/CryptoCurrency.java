@@ -6,17 +6,29 @@ import android.arch.persistence.room.TypeConverter;
  * Created by g-lap on 08/02/2018.
  */
 
-public enum CryptoCurrency {
+public enum CryptoCurrency implements Currency {
 
-    ETH("ethereum","ETH"),      BTC("bitcoin","BTC");
+    ETH("ethereum","ETH"),
+    BTC("bitcoin","BTC");
 
-    String name;
-    String symbol;
+    private final String name;
+    private final String symbol;
 
     CryptoCurrency(String name, String symbol) {
         this.name = name;
         this.symbol = symbol;
     }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getSymbol() {
+        return this.symbol;
+    }
+
 
     /**
      * Convert cryptocurrency string to CryptoCurrency enum.
@@ -41,7 +53,7 @@ public enum CryptoCurrency {
      * Used by Room for the database
      */
     @TypeConverter
-    public static String toName(CryptoCurrency crypto){
+    public static String toString(CryptoCurrency crypto){
         return crypto.name;
     }
 
